@@ -139,7 +139,7 @@ export default function WorkoutScreen() {
       {/* Main Content */}
       <ScreenContainer style={styles.screen}>
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          <Header title="My Workouts" />
+          <Header title="My Workouts" titleStyle={styles.headerTitleLeft} />
 
           <Section title="">
             <Button
@@ -286,5 +286,8 @@ const styles = StyleSheet.create({
   smallIconText: {
     color: theme.colors.accent,
     fontSize: theme.typography.body.fontSize,
+  },
+  headerTitleLeft: {
+    textAlign: 'left',
   },
 });

@@ -1,6 +1,6 @@
-import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
+import React from 'react';
+import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { theme } from '../../constants/theme';
 
 type ButtonProps = {
@@ -24,9 +24,9 @@ const Button: React.FC<ButtonProps> = ({ variant = 'primary', onPress, children,
           colors={[theme.colors.primaryButtonGradientStart, theme.colors.primaryButtonGradientEnd]}
           start={[0, 0]}
           end={[1, 0]}
-          style={styles.gradientFill}
+          style={styles.gradientBackground}
         >
-          {content}
+          <View style={styles.gradientContent}>{content}</View>
         </LinearGradient>
       </TouchableOpacity>
     );
@@ -71,8 +71,12 @@ const styles = StyleSheet.create({
   buttonGradientWrapper: {
     borderRadius: theme.radii.r16,
     overflow: 'hidden',
+    position: 'relative',
   },
-  gradientFill: {
+  gradientBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  gradientContent: {
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.lg,
     alignItems: 'center',

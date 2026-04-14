@@ -7,13 +7,14 @@ type HeaderProps = {
   leftAction?: React.ReactNode;
   rightAction?: React.ReactNode;
   style?: any;
+  titleStyle?: any;
 };
 
-const Header: React.FC<HeaderProps> = ({ title, leftAction, rightAction, style }) => {
+const Header: React.FC<HeaderProps> = ({ title, leftAction, rightAction, style, titleStyle }) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.side}>{leftAction}</View>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, titleStyle]}>{title}</Text>
       <View style={styles.side}>{rightAction}</View>
     </View>
   );

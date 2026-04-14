@@ -1,5 +1,5 @@
-import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
 import { SafeAreaView, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { theme } from '../../constants/theme';
 
