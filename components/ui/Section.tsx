@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: theme.colors.textPrimary,
-    fontSize: theme.typography.section.fontSize,
-    fontWeight: theme.typography.section.fontWeight as any,
+    fontSize: theme.typography.title.fontSize,
+    fontWeight: theme.typography.title.fontWeight as any,
   },
   seeAll: {
     color: theme.colors.primary,
