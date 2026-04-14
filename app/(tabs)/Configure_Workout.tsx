@@ -130,7 +130,7 @@ export default function ConfigureWorkoutScreen() {
       try {
         const rect = (cardRef.current as any).getBoundingClientRect();
         cardOffsetRef.current = { px: rect.left, py: rect.top };
-      } catch (err) {
+      } catch {
         // ignore
       }
     } else if (cardRef.current && cardRef.current.measure) {
@@ -138,7 +138,7 @@ export default function ConfigureWorkoutScreen() {
         cardRef.current.measure((fx: number, fy: number, w: number, h: number, px: number, py: number) => {
           cardOffsetRef.current = { px, py };
         });
-      } catch (err) {
+      } catch {
         // ignore
       }
     }
@@ -315,7 +315,7 @@ export default function ConfigureWorkoutScreen() {
     // include placed exercises and route to Add_Rest_Times for rest configuration
     try {
       nextParams.placed = encodeURIComponent(JSON.stringify(placedExercises || []));
-    } catch (e) {
+    } catch {
       nextParams.placed = encodeURIComponent('[]');
     }
     if (workoutName) nextParams.workoutName = encodeURIComponent(workoutName);

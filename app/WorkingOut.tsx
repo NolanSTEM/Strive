@@ -26,7 +26,7 @@ export default function WorkingOutScreen() {
   const [isRunning, setIsRunning] = useState(true);
   const intervalRef = useRef<number | null>(null);
 
-  const formState = workout?.formState ?? (workout as any)?.form_state ?? {};
+  const formState = useMemo(() => workout?.formState ?? (workout as any)?.form_state ?? {}, [workout]);
 
   const totalSets = useMemo(() => {
     const totalFromWorkout = Number((workout as any)?.total_sets ?? (workout as any)?.totalSets ?? 0);
@@ -44,11 +44,11 @@ export default function WorkingOutScreen() {
       }
     }
     return sum;
-  }, [workout]);
+  }, [workout, formState]);
 
   const [completedSets, setCompletedSets] = useState(0);
   useEffect(() => {
-    if (completedSets > totalSets) setCompletedSets(totalSets);
+    setCompletedSets((cs) => Math.min(cs, totalSets));
   }, [totalSets]);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function WorkingOutScreen() {
   const handleExit = () => {
     try {
       router.back();
-    } catch (err) {
+    } catch {
       router.push('/(tabs)/Sidebar Tabs/Workout');
     }
   };

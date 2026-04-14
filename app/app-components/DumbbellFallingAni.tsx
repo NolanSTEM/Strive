@@ -33,7 +33,7 @@ export default function DumbbellFallingAni() {
         animate();
       }, Math.random() * 2000);
     });
-  }, []);
+  }, [dumbbells]);
 
   return (
     <View style={styles.container} pointerEvents="none">

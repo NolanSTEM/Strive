@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import theme from '../../constants/theme';
+import { theme } from '../../constants/theme';
 
 type ScreenContainerProps = {
   children: React.ReactNode;

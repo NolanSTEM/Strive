@@ -188,10 +188,7 @@ export default function UnitCustomizationScreen() {
 	);
 }
 
-/* Divider */
-function Divider() {
-	return <View style={styles.divider} />;
-}
+/* Divider removed (unused) */
 
 const dividerSpacing = Dimensions.get('window').height * 0.025;
 

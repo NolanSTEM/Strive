@@ -87,7 +87,7 @@ export default function AddRestTimesScreen() {
       if (placedParam) {
         try { placed = JSON.parse(placedParam); } catch { placed = JSON.parse(decodeURIComponent(placedParam)); }
       }
-    } catch (e) {
+    } catch {
       placed = null;
     }
 
@@ -96,7 +96,7 @@ export default function AddRestTimesScreen() {
       if (exercisesParam) {
         try { parsedExercises = JSON.parse(exercisesParam); } catch { parsedExercises = JSON.parse(decodeURIComponent(exercisesParam)); }
       }
-    } catch (e) {
+    } catch {
       parsedExercises = null;
     }
 
@@ -106,7 +106,7 @@ export default function AddRestTimesScreen() {
       if (formStateParam) {
         try { parsedForm = JSON.parse(formStateParam); } catch { parsedForm = JSON.parse(decodeURIComponent(formStateParam)); }
       }
-    } catch (e) {
+    } catch {
       parsedForm = {};
     }
 

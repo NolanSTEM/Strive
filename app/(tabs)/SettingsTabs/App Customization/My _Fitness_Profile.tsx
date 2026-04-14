@@ -11,7 +11,7 @@ export default function MyFitnessProfileScreen() {
                 const loadProfile = async () => {
                     const { data: { user } } = await supabase.auth.getUser();
                     if (!user) return;
-                    const { data, error } = await supabase
+                    const { data } = await supabase
                         .from('fitness_profiles')
                         .select('*')
                         .eq('user_id', user.id)
@@ -46,7 +46,7 @@ export default function MyFitnessProfileScreen() {
                 return;
             }
             // Fetch existing profile to get the id
-            const { data: existing, error: fetchError } = await supabase
+            const { data: existing } = await supabase
                 .from('fitness_profiles')
                 .select('id')
                 .eq('user_id', user.id)
@@ -131,8 +131,8 @@ export default function MyFitnessProfileScreen() {
     };
 
     useEffect(() => {
-        if (errorMessage) setErrorMessage(null);
-    }, [primaryGoal, secondaryGoal]);
+            if (errorMessage) setErrorMessage(null);
+        }, [primaryGoal, secondaryGoal, errorMessage]);
 
     const isSaved = hasSaved && !isDirty;
 
@@ -383,10 +383,7 @@ export default function MyFitnessProfileScreen() {
     );
 }
 
-/* Divider */
-function Divider() {
-    return <View style={styles.divider} />;
-}
+/* Divider removed (unused) */
 
 const dividerSpacing = Dimensions.get('window').height * 0.025;
 

@@ -32,7 +32,7 @@ export default function WorkoutStatsScreen() {
   };
 
   const workout = parseJSONParam(workoutParam) || null;
-  const formState = workout?.formState ?? (workout as any)?.form_state ?? {};
+  const formState = useMemo(() => workout?.formState ?? (workout as any)?.form_state ?? {}, [workout]);
 
   const items = useMemo(() => {
     if (!workout || !Array.isArray(workout.exercises)) return [];

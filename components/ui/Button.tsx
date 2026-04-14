@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
-import theme from '../../constants/theme';
+import { theme } from '../../constants/theme';
 
 type ButtonProps = {
   variant?: 'primary' | 'secondary';

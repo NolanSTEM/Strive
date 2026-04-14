@@ -12,7 +12,7 @@ import Header from '../../../components/ui/Header';
 import ListItem from '../../../components/ui/ListItem';
 import ScreenContainer from '../../../components/ui/ScreenContainer';
 import Section from '../../../components/ui/Section';
-import theme from '../../../constants/theme';
+import { theme } from '../../../constants/theme';
 
 export default function WorkoutScreen() {
   const [collapsed, setCollapsed] = useState(false);

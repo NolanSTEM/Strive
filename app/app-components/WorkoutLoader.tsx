@@ -48,7 +48,7 @@ export default function WorkoutLoader() {
         }),
       ])
     ).start();
-  }, []);
+  }, [rotate, pulse, glow]);
 
   const spin = rotate.interpolate({
     inputRange: [0, 1],

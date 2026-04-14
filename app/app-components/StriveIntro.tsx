@@ -72,7 +72,7 @@ export default function StriveIntro({ onFinish }: { onFinish: () => void }) {
         }, 1500); // ⏱ longer duration
       });
     });
-  }, []);
+  }, [fade, textOpacity, scale, glow, onFinish]);
 
   return (
     <Animated.View style={[styles.container, { opacity: fade }]}>

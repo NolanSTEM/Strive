@@ -14,6 +14,7 @@ import {
     View,
 } from 'react-native';
 import DumbbellFallingAni from '../app-components/DumbbellFallingAni';
+import StriveIntro from '../app-components/StriveIntro';
 import { supabase } from '../supabaseClient';
 
 export default function AuthScreen() {
@@ -49,7 +50,7 @@ export default function AuthScreen() {
     return () => {
       if (subscription) subscription.remove();
     };
-  }, [verificationSent, isSignUp]);
+  }, [verificationSent, isSignUp, router]);
 
   // Handler for sign up
   const handleSignUp = async () => {
@@ -157,7 +158,6 @@ export default function AuthScreen() {
   }
 
   if (showIntro) {
-    const StriveIntro = require('../app-components/StriveIntro').default;
     return <StriveIntro onFinish={() => {
       setShowIntro(false);
       router.replace('/(tabs)/Sidebar Tabs/Workout');
