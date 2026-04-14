@@ -20,8 +20,13 @@ const Button: React.FC<ButtonProps> = ({ variant = 'primary', onPress, children,
     (async () => {
       try {
         const mod = await import('expo-linear-gradient');
-        const LG = mod?.LinearGradient ?? mod?.default ?? null;
-        if (mounted) setLinearGradient(LG);
+        // Resolve the actual LinearGradient component from several possible shapes
+        let LG: any = null;
+        if (mod?.LinearGradient) LG = mod.LinearGradient;
+        else if (mod?.default?.LinearGradient) LG = mod.default.LinearGradient;
+        else if (mod?.default) LG = mod.default;
+        else LG = mod;
+        if (mounted) setLinearGradient(LG ?? null);
       } catch {
         // expo-linear-gradient not installed — fallback will be used
       }
