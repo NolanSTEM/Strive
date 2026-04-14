@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 import { theme } from '../../constants/theme';
 
@@ -13,51 +14,20 @@ type ButtonProps = {
 
 const Button: React.FC<ButtonProps> = ({ variant = 'primary', onPress, children, style, textStyle, disabled }) => {
   const isPrimary = variant === 'primary';
-  const [LinearGradient, setLinearGradient] = useState<any | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const mod = await import('expo-linear-gradient');
-        // Resolve the actual LinearGradient component from several possible shapes
-        let LG: any = null;
-        if (mod?.LinearGradient) LG = mod.LinearGradient;
-        else if (mod?.default?.LinearGradient) LG = mod.default.LinearGradient;
-        else if (mod?.default) LG = mod.default;
-        else LG = mod;
-        if (mounted) setLinearGradient(LG ?? null);
-      } catch {
-        // expo-linear-gradient not installed — fallback will be used
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   const content = <Text style={[styles.text, isPrimary ? styles.textPrimary : styles.textSecondary, textStyle]}>{children}</Text>;
 
   if (isPrimary) {
-    if (LinearGradient) {
-      return (
-        <TouchableOpacity activeOpacity={0.85} onPress={onPress} disabled={disabled} style={[styles.buttonGradientWrapper, style]}>
-          {/* @ts-ignore */}
-          <LinearGradient
-            colors={[theme.colors.primaryButtonGradientStart, theme.colors.primaryButtonGradientEnd]}
-            start={[0, 0]}
-            end={[1, 0]}
-            style={styles.gradientFill}
-          >
-            {content}
-          </LinearGradient>
-        </TouchableOpacity>
-      );
-    }
-
     return (
-      <TouchableOpacity activeOpacity={0.85} onPress={onPress} disabled={disabled} style={[styles.button, styles.primaryFallback, disabled && styles.disabled, style]}>
-        {content}
+      <TouchableOpacity activeOpacity={0.85} onPress={onPress} disabled={disabled} style={[styles.buttonGradientWrapper, disabled && styles.disabled, style]}>
+        <LinearGradient
+          colors={[theme.colors.primaryButtonGradientStart, theme.colors.primaryButtonGradientEnd]}
+          start={[0, 0]}
+          end={[1, 0]}
+          style={styles.gradientFill}
+        >
+          {content}
+        </LinearGradient>
       </TouchableOpacity>
     );
   }
