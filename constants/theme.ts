@@ -3,51 +3,66 @@
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
-import { Platform } from 'react-native';
+/* Centralized theme for the UI system.
+   Follow the project's design rules: use these values throughout the app.
+*/
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+export const theme = {
+  colors: {
+    primary: '#3B82F6',
+    // Background gradient stops (use these when rendering gradients)
+    background: '#0a1628',
+    backgroundGradientStart: '#0a1628',
+    backgroundGradientMid: '#0d2847',
+    backgroundGradientEnd: '#051427',
+    card: '#111827',
+    cardGlass: 'rgba(255,255,255,0.05)',
 
-export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
-};
+    textPrimary: '#F9FAFB',
+    textSecondary: '#9CA3AF',
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+    border: 'rgba(255,255,255,0.08)',
+    accent: '#60A5FA',
+
+    // Primary button gradients + hover + glows
+    primaryButtonGradientStart: '#0ea5e9',
+    primaryButtonGradientEnd: '#06b6d4',
+    primaryButtonHoverStart: '#0284c7',
+    primaryButtonHoverEnd: '#0891b2',
+    primaryButtonGlow1: 'rgba(6,182,212,0.3)', // cyan-500 @ 30%
+    primaryButtonGlow2: 'rgba(34,211,238,0.5)', // cyan-400 @ 50%
+
+    // Workout stats icon colors
+    statsExercises: '#38bdf8',
+    statsDuration: '#7dd3fc',
+    statsCalories: '#22d3ee',
+
+    // Card hover border
+    cardHoverBorder: 'rgba(34,211,238,0.3)',
   },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
+
+  typography: {
+    title: { fontSize: 28, fontWeight: '700' },
+    section: { fontSize: 18, fontWeight: '600' },
+    body: { fontSize: 16, fontWeight: '400' },
   },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 12,
+    lg: 16,
+    xl: 24,
+    xxl: 32,
   },
-});
+
+  radii: {
+    r12: 12,
+    r16: 16,
+    r20: 20,
+  },
+} as const;
+
+export type Theme = typeof theme;
+
+export default theme;

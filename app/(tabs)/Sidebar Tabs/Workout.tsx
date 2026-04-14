@@ -1,17 +1,18 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Animated,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, ScrollView, StyleSheet, View } from 'react-native';
 import Sidebar from '../../app-components/Sidebar';
 import WorkoutLoader from '../../app-components/WorkoutLoader';
 import { supabase } from '../../supabaseClient';
+
+import Button from '../../../components/ui/Button';
+import Card from '../../../components/ui/Card';
+import Header from '../../../components/ui/Header';
+import ListItem from '../../../components/ui/ListItem';
+import ScreenContainer from '../../../components/ui/ScreenContainer';
+import Section from '../../../components/ui/Section';
+import theme from '../../../constants/theme';
 
 export default function WorkoutScreen() {
   const [collapsed, setCollapsed] = useState(false);
@@ -129,50 +130,33 @@ export default function WorkoutScreen() {
   };
 
   return (
-    <View style={{ flex: 1, flexDirection: 'row' }}>
+    <View style={styles.root}>
       {/* Sidebar */}
-      <Animated.View
-        style={{
-          width: sidebarContainerWidth,
-          backgroundColor: '#010057',
-        }}
-      >
+      <Animated.View style={[styles.sidebarWrap, { width: sidebarContainerWidth }]}> 
         <Sidebar width={width} collapsed={collapsed} onToggle={toggleSidebar} />
       </Animated.View>
 
       {/* Main Content */}
-      <View style={{ flex: 1 }}>
-        <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
-          
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.title}>My Workouts</Text>
-          </View>
+      <ScreenContainer style={styles.screen}>
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          <Header title="My Workouts" />
 
-          {/* Create Workout Button */}
-          <TouchableOpacity
-            style={styles.createButton}
-            onPress={() => router.push('/(tabs)/Name_Workout')}
-          >
-            <Text style={styles.createButtonText}>＋ Create Workout</Text>
-          </TouchableOpacity>
+          <Section title="">
+            <Button
+              onPress={() => router.push('/(tabs)/Name_Workout')}
+              style={styles.createButton}
+              textStyle={styles.createButtonText}
+            >
+              ＋ Create Workout
+            </Button>
+          </Section>
 
-          {/* Created Workouts List */}
-          {createdWorkouts.length > 0 && (
-            <View style={{ marginTop: 16 }}>
+          {createdWorkouts.length > 0 ? (
+            <Section title="Saved Workouts">
               {createdWorkouts.map((w, i) => (
-                <View key={`${w.name}-${i}`} style={styles.workoutRow}>
-                  <TouchableOpacity
-                    style={styles.leftStrip}
-                    activeOpacity={0.9}
-                    onPress={() => handleDelete(w, i)}
-                  >
-                    <MaterialIcons name="delete" size={32} color="#010057" />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.workoutContent}
-                    activeOpacity={0.9}
+                <Card key={`${w.name}-${i}`} variant="glass" style={styles.workoutCard}>
+                  <ListItem
+                    title={w.name}
                     onPress={() => {
                       try {
                         const params: Record<string, string> = { workout: encodeURIComponent(JSON.stringify(w)) };
@@ -181,205 +165,126 @@ export default function WorkoutScreen() {
                         console.warn('Failed to open workout stats', err);
                       }
                     }}
-                  >
-                    <Text style={styles.workoutRowText}>{w.name}</Text>
-                  </TouchableOpacity>
+                    rightElement={
+                      <View style={styles.actionsRow}>
+                        <Button
+                          variant="secondary"
+                          onPress={() => handleDelete(w, i)}
+                          style={[styles.iconButton, styles.deleteButton]}
+                          textStyle={styles.smallIconText}
+                        >
+                          <MaterialIcons name="delete" size={18} color={theme.colors.accent} />
+                        </Button>
 
-                  <TouchableOpacity
-                    style={styles.workoutRowBg}
-                    activeOpacity={0.9}
-                    hitSlop={{ left: 16, right: 8, top: 8, bottom: 8 }}
-                    onPress={() => {
-                      try {
-                        const params: Record<string, string> = { workout: encodeURIComponent(JSON.stringify(w)) };
-                        router.push({ pathname: '/(tabs)/Workout_Stats', params } as any);
-                      } catch (e) {
-                        console.warn('Failed to open workout stats', e);
-                      }
-                    }}
-                  >
-                    <View style={styles.workoutRowTriangle} pointerEvents="none" />
-                  </TouchableOpacity>
-                </View>
+                        <Button
+                          variant="primary"
+                          onPress={() => {
+                            try {
+                              const params: Record<string, string> = { workout: encodeURIComponent(JSON.stringify(w)) };
+                              router.push({ pathname: '/(tabs)/Workout_Stats', params } as any);
+                            } catch (e) {
+                              console.warn('Failed to open workout stats', e);
+                            }
+                          }}
+                          style={styles.arrowButton}
+                        >
+                          <MaterialIcons name="chevron-right" size={20} color={theme.colors.textPrimary} />
+                        </Button>
+                      </View>
+                    }
+                  />
+                </Card>
               ))}
-            </View>
+            </Section>
+          ) : (
+            <Card style={styles.emptyCard}>
+              <ListItem title="No Workouts Yet" subtitle="Create your first workout to start tracking your progress." />
+            </Card>
           )}
-
-          {/* Empty State */}
-          {createdWorkouts.length === 0 && (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyTitle}>No Workouts Yet</Text>
-
-              <Text style={styles.emptySubtitle}>
-                Create your first workout to start tracking your progress.
-              </Text>
-            </View>
-          )}
-
         </ScrollView>
+
         {isLoading && <WorkoutLoader />}
-      </View>
+      </ScreenContainer>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: '#010057',
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-
-  header: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    backgroundColor: theme.colors.background,
+  },
+  sidebarWrap: {
+    backgroundColor: theme.colors.background,
+  },
+  screen: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: theme.spacing.xl,
+  },
+  workoutCard: {
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.radii.r16,
+    padding: 0,
+  },
+  actionsRow: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#ffffff',
+  iconButton: {
+    minWidth: 44,
+    borderRadius: theme.radii.r12,
+    paddingVertical: theme.spacing.xs,
+    paddingHorizontal: theme.spacing.sm,
   },
-
-  addButton: {
-    backgroundColor: '#00BFFF',
-    width: 120,
-    height: 55,
-    borderRadius: 20,
-    borderWidth: 1.75,
-    borderColor: '#000000',
+  deleteButton: {
+    marginRight: theme.spacing.sm,
+  },
+  emptyCard: {
+    marginTop: theme.spacing.xxl,
+    borderRadius: theme.radii.r16,
+    paddingVertical: theme.spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  addButtonText: {
-    color: '#000000',
-    fontSize: 13,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-
   createButton: {
-    marginTop: 25,
-    backgroundColor: '#00BFFF',
-    paddingVertical: 18,
-    borderRadius: 18,
+    width: '100%',
+    borderRadius: theme.radii.r20,
+    paddingVertical: theme.spacing.xl,
+    backgroundColor: theme.colors.primaryButtonGradientStart,
+    borderColor: theme.colors.primaryButtonGradientEnd,
+    borderWidth: 1,
+    shadowColor: theme.colors.primaryButtonGlow2,
+    shadowOpacity: 0.35,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 24,
+    elevation: 6,
     alignItems: 'center',
-    shadowColor: '#00BFFF',
-    shadowOpacity: 0.4,
-    shadowRadius: 10,
-    elevation: 5,
+    justifyContent: 'center',
   },
-
   createButtonText: {
-    color: '#000000',
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: theme.colors.textPrimary,
+    fontSize: theme.typography.section.fontSize,
+    fontWeight: theme.typography.section.fontWeight as any,
   },
-
-  emptyContainer: {
-    flex: 1,
-    marginTop: 80,
-    alignItems: 'center',
-  },
-
-  emptyIcon: {
-    fontSize: 60,
-    marginBottom: 20,
-  },
-
-  emptyTitle: {
-    color: '#ffffff',
-    fontSize: 22,
-    fontWeight: '600',
-    marginBottom: 10,
-  },
-
-  emptySubtitle: {
-    color: '#8A9BFF',
-    fontSize: 16,
-    textAlign: 'center',
-    paddingHorizontal: 30,
-  },
-  workoutRow: {
-    marginHorizontal: 0,
-    marginTop: 8,
-    backgroundColor: '#transparent',
-    paddingVertical: 20,
-    paddingLeft: '6%',
-    paddingRight: 16,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#00BBFF',
-    shadowColor: '#00BFFF',
-    shadowOpacity: 0.25,
-    shadowRadius: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    overflow: 'visible',
-  },
-  leftStrip: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: '4%',
-    backgroundColor: '#ff3b30',
-    borderTopLeftRadius: 7.5,
-    borderBottomLeftRadius: 7.5,
+  arrowButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 2,
+    backgroundColor: theme.colors.primaryButtonGradientEnd,
+    shadowColor: theme.colors.primaryButtonGlow1,
+    shadowOpacity: 0.45,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 18,
+    elevation: 6,
   },
-  workoutContent: {
-    flex: 1,
-    paddingLeft: 8,
-    paddingRight: 8,
-    justifyContent: 'center',
-    zIndex: 1,
-  },
-  workoutRowText: {
-    color: '#00BFFF',
-    fontSize: 24,
-    fontWeight: '700',
-    zIndex: 1,
-  },
-  workoutRowBg: {
-    position: 'absolute',
-    right: -3,
-    top: 0,
-    bottom: 0,
-    width: '4%',
-    backgroundColor: '#00BBFF',
-    borderTopRightRadius: 10,
-    borderBottomRightRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 3,
-  },
-  workoutRowTriangle: {
-    width: 0,
-    height: 0,
-    borderTopWidth: 15,
-    borderBottomWidth: 15,
-    borderLeftWidth: 18,
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    borderLeftColor: '#010057',
-  },
-  workoutTip: {
-    backgroundColor: '#00BBFF',
-    width: '5%',
-    height: 60,
-    top: -50,
-    left: 50,
-  },
-  workoutTipIcon: {
-    color: '#010057',
-    fontSize: 16,
-    fontWeight: '700',
+  smallIconText: {
+    color: theme.colors.accent,
+    fontSize: theme.typography.body.fontSize,
   },
 });
